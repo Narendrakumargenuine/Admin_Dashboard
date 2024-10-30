@@ -10,7 +10,7 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColorContext } from "../../ColorContext/darkContext";
 import "./Sidebar.scss";
-
+import logo from "../../Images/logo.jpg"
 function Sidebar() {
   // color state management using react context
   const { darkMode, dispatch } = useContext(ColorContext);
@@ -33,7 +33,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <h3 className="text_none">Dashboard</h3>
+         <img src={logo} className="logo-imgaer"/>
         </Link>
       </div>
 

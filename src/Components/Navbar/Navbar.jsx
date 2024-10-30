@@ -13,6 +13,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColorContext } from "../../ColorContext/darkContext";
+import logo from "../../Images/logo.jpg";
 
 // import sass file
 import "./navbar.scss";
@@ -48,8 +49,8 @@ function Navbar() {
             <MenuIcon className="menu_icon" onClick={handleToggle} />
           )}
 
-          <Link to="/home" style={{ textDecoration: "none" }}>
-            <h3 className="text_none">Dashboard</h3>
+          <Link to="/home" style={{ textDecoration: "none",height:"40px",marginLeft:"20px",width:"100px" }}>
+            <img src={logo} height={47} width={170}/> 
           </Link>
         </div>
         <div className="search">
@@ -59,39 +60,10 @@ function Navbar() {
         </div>
 
         <div className="item_lists">
-          {/* <div className="item item_lan">
-                        <LanguageIcon className="item_icon" />
-                        <p>English</p>
-                    </div> */}
-          {/* <div className="item">
-                        {!darkMode ? (
-                            <DarkModeIcon
-                                className="item_icon"
-                                onClick={() => dispatch({ type: 'TOGGLE' })}
-                            />
-                        ) : (
-                            <LightModeIcon
-                                className="item_icon white"
-                                onClick={() => dispatch({ type: 'TOGGLE' })}
-                            />
-                        )}
-                    </div> */}
-          {/* <div className="item">
-                        <FullscreenExitIcon className="item_icon" />
-                    </div> */}
-
-          {/* <div className="item">
-                        <ChatBubbleOutlineIcon className="item_icon" />
-                        <span className="badge">2</span>
-                    </div> */}
-          <div className="item">
+       <div className="item">
             <NotificationsNoneIcon className="item_icon" />
             <span className="badge">1</span>
           </div>
-
-          {/* <div className="item">
-                        <img className="admin_pic" src={admin} alt="admin" />
-                    </div> */}
         </div>
       </div>
 
@@ -125,20 +97,10 @@ function Navbar() {
                       <CreditCardIcon className="icon" /> Rejected
                     </li>
                   </Link>
-                  {/* <li>
-                    <CreditCardIcon className="icon" /> Balance
-                  </li>
-                  <li>
-                    <BarChartIcon className="icon" /> Status
-                  </li> */}
+                
 
                   <p className="spann">Settings</p>
-                  {/* <li>
-                    <AccountCircleIcon className="icon" /> Support
-                  </li>
-                  <li>
-                    <SettingsRoundedIcon className="icon" /> Setting
-                  </li> */}
+              
                   <li onClick={handleLogout}>
                     <LogoutIcon className="icon" /> Log Out
                   </li>

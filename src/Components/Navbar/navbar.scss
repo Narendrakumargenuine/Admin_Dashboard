@@ -5,8 +5,9 @@ $text_color: #3d3c42;
   // height: 60px;
   .navbar_main {
     display: flex;
+    // justify-content: space-between;
+   
     justify-content: space-between;
-    align-items: center;
     padding: 15px 25px;
     border-bottom: 1px solid #eee;
 
@@ -190,60 +191,10 @@ $text_color: #3d3c42;
     }
   }
 }
-
-@media screen and (max-width: 992px) {
-  .navbar {
-    // height: 60px;
-    .navbar_main {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 25px;
-      border-bottom: 1px solid #eee;
-
-      .menu_logo {
-        display: block !important;
-        display: flex !important;
-        align-items: center !important;
-
-        .text_none {
-          margin-left: 5px;
-          color: #4665fdde;
-        }
-      }
-    }
-
-    .res_navbar {
-      display: block;
-    }
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .navbar {
-    .navbar_main {
-      padding: 15px 15px;
-
-      .search {
-        display: none;
-      }
-
-      .item_lists {
-        .item {
-          margin-left: 10px;
-        }
-        .item_lan {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
 @media screen and (min-width: 300px) and (max-width: 500px) {
   .navbar {
-    width: 848px; // Set the width of the navbar
-
+    width: 80%; // Set the width of the navbar
+  
     .menu_icon {
       font-size: 50px; // Increase font size of the menu icon
     }
@@ -252,7 +203,12 @@ $text_color: #3d3c42;
       font-size: 40px; // Increase font size of the dashboard text
     }
   }
-
+  .navbar .navbar_main {
+    width: 58%;
+    justify-content: space-between;
+    height: 60px;
+    padding: 15px 15px;
+}
   .navbar .navbar_main .item_lists .item .item_icon {
     font-size: 40px;
     cursor: pointer;
@@ -285,3 +241,59 @@ $text_color: #3d3c42;
     font-size: 25px;
   }
 }
+@media screen and (max-width: 992px) {
+  .navbar {
+    // height: 60px;
+    .navbar_main {
+      display: flex;
+      width: 50%;
+      // justify-content: space-between;
+      height: 100px;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+
+      .menu_logo {
+        display: block !important;
+        display: flex !important;
+        align-items: center !important;
+
+        .text_none {
+          margin-left: 5px;
+          color: #4665fdde;
+        }
+      }
+    }
+
+    .res_navbar {
+      width: 1285px;
+      display: block;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navbar {
+    .navbar_main {
+      width: 100%;
+      justify-content: space-between;
+      height: 60px;
+      padding: 15px 15px;
+
+      .search {
+        display: none;
+      }
+
+      .item_lists {
+        .item {
+          margin-left: 10px;
+        }
+        .item_lan {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+
