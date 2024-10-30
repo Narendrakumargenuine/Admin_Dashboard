@@ -109,36 +109,36 @@ function Navbar() {
                   </Link>
 
                   <p className="spann">lists</p>
-                  <Link to="/users" style={{ textDecoration: "none" }}>
+                  <Link to="/contacts" style={{ textDecoration: "none" }}>
                     <li>
-                      <PersonIcon className="icon" /> Users
+                      <PersonIcon className="icon" /> Orders
                     </li>
                   </Link>
 
-                  <Link to="/contacts" style={{ textDecoration: "none" }}>
+                  <Link to="/pending" style={{ textDecoration: "none" }}>
                     <li>
-                      <TableChartIcon className="icon" /> Contacts
+                      <TableChartIcon className="icon" /> Pending
                     </li>
                   </Link>
-                  <Link to="/orders" style={{ textDecoration: "none" }}>
+                  <Link to="/rejected" style={{ textDecoration: "none" }}>
                     <li>
-                      <CreditCardIcon className="icon" /> Orders
+                      <CreditCardIcon className="icon" /> Rejected
                     </li>
                   </Link>
-                  <li>
+                  {/* <li>
                     <CreditCardIcon className="icon" /> Balance
                   </li>
                   <li>
                     <BarChartIcon className="icon" /> Status
-                  </li>
+                  </li> */}
 
                   <p className="spann">Settings</p>
-                  <li>
+                  {/* <li>
                     <AccountCircleIcon className="icon" /> Support
                   </li>
                   <li>
                     <SettingsRoundedIcon className="icon" /> Setting
-                  </li>
+                  </li> */}
                   <li onClick={handleLogout}>
                     <LogoutIcon className="icon" /> Log Out
                   </li>
