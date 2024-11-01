@@ -27,7 +27,7 @@ function ItemLists({ type }) {
         // Calculate total, pending, and rejected counts
         const total = data.contacts.length || 0; // Assuming response has 'contacts' array
         const pending = data.contacts.filter(
-          (contact) => contact.status === "pending"
+          (contact) => contact.status === "completed"
         ).length;
         const rejected = data.contacts.filter(
           (contact) => contact.status === "rejected"
@@ -72,7 +72,7 @@ function ItemLists({ type }) {
       break;
     case "orders":
       data = {
-        title: "Pending",
+        title: "Completed",
         isMoney: false,
         count: counts.pending, // Use fetched pending count
         icon: (
@@ -84,8 +84,8 @@ function ItemLists({ type }) {
             className="icon"
           />
         ),
-        link: "View all pending orders",
-        linkto: "/pending",
+        link: "View all completed orders",
+        linkto: "/completed",
       };
       break;
     case "products":

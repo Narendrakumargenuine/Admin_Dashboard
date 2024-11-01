@@ -38,7 +38,7 @@ function App() {
             element={<AuthRoute element={<Home />} isAdmin={user.admin} />}
           />
           {/* Other routes */}
-          <Route path="/pending">
+          <Route path="/completed">
             <Route index element={<Lists type="user" />} />
             <Route path=":userId" element={<Detail />} />
           </Route>

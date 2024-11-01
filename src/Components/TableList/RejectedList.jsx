@@ -1,100 +1,255 @@
-/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import "./tableList.scss";
 
-// MUI Components
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-
 const REJECTED_API_URL =
-  "https://auto-mobile-backend.vercel.app/form/contacts/rejected"; // API endpoint for rejected contacts
+  "https://auto-mobile-backend.vercel.app/form/contacts/rejected";
 
 function RejectedList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredImage, setHoveredImage] = useState(null);
+  const [enlargedImage, setEnlargedImage] = useState(null);
+  const [selectedDescription, setSelectedDescription] = useState(null);
+
+  const fetchRejectedContacts = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(REJECTED_API_URL);
+      const result = await response.json();
+      const transformedData = result.contacts.map((contact) => ({
+        id: contact._id,
+        fullname: contact.fullname,
+        phone: contact.phone,
+        email: contact.email,
+        description: contact.description || "No Description",
+        image: contact.image,
+        status: contact.status,
+        orderDate: new Date(contact.createdAt).toLocaleString(),
+      }));
+      transformedData.sort(
+        (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+      );
+      setData(transformedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchRejectedContacts = async () => {
-      try {
-        const response = await fetch(REJECTED_API_URL);
-        const result = await response.json();
-        setData(result.contacts || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRejectedContacts();
   }, []);
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`https://auto-mobile-backend.vercel.app/form/delete/${id}`, {
+        method: "DELETE",
+      });
+      fetchRejectedContacts();
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+    }
+  };
+
+  const handleImageHover = (img) => {
+    setHoveredImage(img);
+  };
+
+  const handleImageClick = (img) => {
+    setEnlargedImage(img);
+  };
+
+  const handleCloseEnlargedImage = () => {
+    setEnlargedImage(null);
+  };
+
+  const handleDownloadImage = () => {
+    if (enlargedImage) {
+      const link = document.createElement("a");
+      link.href = enlargedImage;
+      link.download = enlargedImage.split("/").pop();
+      link.click();
+    }
+  };
+
+  const handleDescriptionClick = (description) => {
+    setSelectedDescription(description);
+  };
+
+  const handleCloseDescription = () => {
+    setSelectedDescription(null);
+  };
+
+  const columns = [
+    { field: "fullname", headerName: "Full Name", width: 150 },
+    { field: "phone", headerName: "Phone", width: 150 },
+    { field: "email", headerName: "Email", width: 200 },
+    {
+      field: "description",
+      headerName: "Description",
+      width: 200,
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          onClick={() => handleDescriptionClick(params.row.description)}
+          style={{ cursor: "pointer" }}
+        >
+          {params.row.description.length > 50
+            ? `${params.row.description.slice(0, 50)}...`
+            : params.row.description}
+        </Typography>
+      ),
+    },
+    {
+      field: "orderDate",
+      headerName: "Order Date & Time",
+      width: 200,
+    },
+    {
+      field: "image",
+      headerName: "Images",
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          {params.row.image.length > 0 ? (
+            params.row.image.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Contact Image ${index + 1}`}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  objectFit: "cover",
+                  marginRight: "5px",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={() => handleImageHover(img)}
+                onMouseLeave={() => setHoveredImage(null)}
+                onClick={() => handleImageClick(img)}
+              />
+            ))
+          ) : (
+            <span>No Image</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 150,
+      renderCell: (params) => (
+        <span
+          style={{
+            color: "red",
+            fontWeight: "bold",
+            padding: "4px 8px",
+            borderRadius: "12px",
+            backgroundColor: "#ffebee",
+          }}
+        >
+          {params.row.status}
+        </span>
+      ),
+    },
+    {
+      field: "delete",
+      headerName: "Actions",
+      width: 100,
+      renderCell: (params) => (
+        <DeleteIcon
+          onClick={() => handleDelete(params.row.id)}
+          style={{ cursor: "pointer", color: "red" }}
+        />
+      ),
+    },
+  ];
 
   return (
-    <TableContainer component={Paper} className="table_list">
+    <div className="rejectedList" style={{ height: "700px", width: "100%" }}>
       {loading ? (
-        <p>Loading...</p>
+        <Typography variant="h6" align="center" sx={{ m: 3 }}>
+          Loading...
+        </Typography>
       ) : data.length === 0 ? (
-        <p>No rejected orders</p>
+        <Typography variant="h6" align="center" sx={{ m: 3 }}>
+          No rejected contacts
+        </Typography>
       ) : (
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className="table_cell">Full Name</TableCell>
-              <TableCell className="table_cell">Phone</TableCell>
-              <TableCell className="table_cell">Email</TableCell>
-              <TableCell className="table_cell">Description</TableCell>
-              <TableCell className="table_cell">Images</TableCell>
-              <TableCell className="table_cell">Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((contact) => (
-              <TableRow key={contact._id}>
-                <TableCell className="table_cell">{contact.fullname}</TableCell>
-                <TableCell className="table_cell">{contact.phone}</TableCell>
-                <TableCell className="table_cell">{contact.email}</TableCell>
-                <TableCell className="table_cell">
-                  {contact.description}
-                </TableCell>
-                <TableCell className="table_cell">
-                  {contact.image.length > 0 ? (
-                    <div className="images_container">
-                      {contact.image.map((imgUrl, index) => (
-                        <img
-                          key={index}
-                          src={imgUrl}
-                          alt={`contact ${index + 1}`}
-                          className="contact_image"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            objectFit: "cover",
-                            margin: "4px",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <span>No Images</span>
-                  )}
-                </TableCell>
-                <TableCell className="table_cell">
-                  <span className={`status ${contact.status}`}>
-                    {contact.status}
-                  </span>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataGrid
+          rows={data}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          loading={loading}
+        />
       )}
-    </TableContainer>
+      {hoveredImage && (
+        <div className="image-hover">
+          <img
+            src={hoveredImage}
+            alt="Hovered"
+            style={{
+              position: "absolute",
+              top: "20%",
+              left: "45%",
+              width: "300px",
+              height: "300px",
+              objectFit: "cover",
+              border: "2px solid #ccc",
+              zIndex: 1000,
+            }}
+          />
+        </div>
+      )}
+      {enlargedImage && (
+        <div className="enlarged-image-modal">
+          <div className="enlarged-image-content">
+            <span className="close-enlarged" onClick={handleCloseEnlargedImage}>
+              &times;
+            </span>
+            <img
+              src={enlargedImage}
+              alt="Enlarged"
+              style={{
+                width: "80%",
+                height: "auto",
+                maxHeight: "80vh",
+                objectFit: "contain",
+                display: "block",
+                margin: "auto",
+              }}
+            />
+            <button
+              className="btn"
+              onClick={handleDownloadImage}
+              style={{ marginTop: "10px" }}
+            >
+              <GetAppIcon style={{ marginRight: "5px", color: "#fff" }} />
+              Download Image
+            </button>
+          </div>
+        </div>
+      )}
+      {selectedDescription && (
+        <div className="description-modal">
+          <div className="description-modal-content">
+            <span
+              className="close-description"
+              onClick={handleCloseDescription}
+            >
+              &times;
+            </span>
+            <Typography variant="body1">{selectedDescription}</Typography>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

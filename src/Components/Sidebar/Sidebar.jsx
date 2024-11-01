@@ -52,9 +52,9 @@ function Sidebar() {
             <li>
               <AccountCircleIcon className="icon" /> Orders
             </li>
-            <Link to="/pending" style={{ textDecoration: "none" }}>
+            <Link to="/completed" style={{ textDecoration: "none" }}>
               <li>
-                <PersonIcon className="icon" /> Pending
+                <PersonIcon className="icon" /> Completed
               </li>
             </Link>
           </Link>
